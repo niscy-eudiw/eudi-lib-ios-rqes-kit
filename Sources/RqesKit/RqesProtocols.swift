@@ -51,7 +51,7 @@ public protocol RQESServiceAuthorizedProtocol {
 	/// - Parameters:
 	///   - credentialInfo: Information about the credential.
 	///   - documents: An array of documents that will be signed.
-	///   - hashAlgorithmOID: The object identifier (OID) of the hash algorithm to be used, optinal.
+	///   - hashAlgorithmOID: The object identifier (OID) of the hash algorithm to be used, optional.
 	///   - certificates: An optional array of X509 certificates.
 	/// - Returns: The credential authorization URL
 	/// The credential authorization URL is used to authorize the credential that will be used to sign the documents.
