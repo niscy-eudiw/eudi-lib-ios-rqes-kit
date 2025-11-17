@@ -34,8 +34,6 @@ sequenceDiagram
     participant RQESService
     participant RQESServiceAuthorized
     participant RQESServiceCredentialAuthorized
-    Client ->>+ RQESService: getRSSPMetadata()
-    RQESService -->>- Client: RSSPMetadata
     Client ->>+ RQESService: getServiceAuthorizationUrl()
     RQESService -->>- Client: URL
     Client ->>+ RQESService: authorizeService(authorizationCode)
@@ -56,22 +54,17 @@ At first, construct an instance of the `RQESService` like shown below:
 
 ```swift
 let cscClientConfig = CSCClientConfig(
-        OAuth2Client: CSCClientConfig.OAuth2Client(
-                clientId: "wallet-client",
-                clientSecret: "somesecret2"
-        ),
-        authFlowRedirectionURI: "https://oauthdebugger.com/debug", rsspId: "")
-var rqesService = RQESService(
+    OAuth2Client: CSCClientConfig.OAuth2Client(
+        clientId: "wallet-client",
+        clientSecret: "somesecret2"
+    ),
+    authFlowRedirectionURI: "https://oauthdebugger.com/debug", rsspId: ""
+)
+var rqesService = await RQESService(
     clientConfig: cscClientConfig,
     defaultHashAlgorithmOID: .SHA256
 )
 ```
-
-You can get the metadata of the RQES service by calling the `getRSSPMetadata` method:
-
-```swift
-let metadata = try await rqesService.getRSSPMetadata()
-``` 
 
 To authorize the service, you need to get the authorization URL and open it in a browser. After the
 user has authorized the service, the browser will be redirected to the `redirectUri`,
@@ -106,12 +99,13 @@ let credentials = try await authorizedService.getCredentialsList()
 
 let credential = credentials.first!
 // Prepare the documents to sign
-let unsignedDocuments = [Document(label: "Document to sign", fileURL: Bundle.main.url(forResource: "document", withExtension:"pdf")))]
+let documentURL = Bundle.main.url(forResource: "document", withExtension: "pdf")!
+let unsignedDocuments = [Document(id: "Document to sign", fileURL: documentURL)]
 
 // Get the credential authorization URL for the selected credential and documents
 let credentialAuthorizationUrl = try await authorizedService.getCredentialAuthorizationUrl(
     credentialInfo: credential,
-    documents: unsignedDocuments,
+    documents: unsignedDocuments
 )
 
 // Use the credentialAuthorizationUrl to open a browser and let the user authorize the credential
