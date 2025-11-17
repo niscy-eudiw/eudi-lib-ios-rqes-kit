@@ -15,7 +15,7 @@ signing processes.
 To use RQES Kit, add the following dependency to your Package.swift:
 ```swift
 dependencies: [
-    .package(url: "https://github.com/niscy-eudiw/eudi-lib-ios-rqes-kit", branch: "initial")
+    .package(url: "https://github.com/niscy-eudiw/eudi-lib-ios-rqes-kit", exact: "0.6.4")
 ]
 ```
 
